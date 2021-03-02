@@ -1,0 +1,173 @@
+<html>
+
+<head>
+
+	<link rel="stylesheet" href="/stylesheets/style.css">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Krona+One&display=swap" rel="stylesheet">
+</head>
+
+<title>Socket.IO chat</title>
+<style>
+	body {
+		margin: 0;
+		padding-bottom: 3rem;
+		font-family: 'Dancing Script', cursive;
+		background-image: url("https://media.istockphoto.com/vectors/vector-elearning-pattern-elearning-seamless-background-vector-id943758330?b=1&k=6&m=943758330&s=612x612&w=0&h=A8Aoy3e6ry01Xf-MDFhxPEi4u4TXera3dT8ea51l744=");
+		background-repeat: repeat;
+	}
+
+	#form {
+		background: rgba(0, 0, 0, 0.15);
+		padding: 0.25rem;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		display: flex;
+		height: 3rem;
+		box-sizing: border-box;
+		backdrop-filter: blur(10px);
+	}
+
+	#input {
+		border: none;
+		padding: 0 1rem;
+		flex-grow: 1;
+		border-radius: 2rem;
+		margin: 0.25rem;
+	}
+
+	#input:focus {
+		outline: none;
+	}
+
+	#form>button {
+		background: #333;
+		border: none;
+		padding: 0 1rem;
+		margin: 0.25rem;
+		border-radius: 3px;
+		outline: none;
+		color: #fff;
+	}
+
+	#messages {
+		list-style-type: none;
+    margin-top:100px;
+		margin-left:30px;
+		padding: 0;
+	}
+
+	#messages>li {
+		padding: 0.5rem 1rem;
+		background: #fff;
+	}
+
+	#messages>li:nth-child(odd) {
+		background: #efefef;
+	}
+
+	.par {
+
+		background-color: lightgray;
+		border-radius: 15px;
+		padding: 5px;
+		padding-left: 11px;
+		padding-right: 14px;
+
+	}
+
+	a {
+
+		background-color: lightgray;
+		border-radius: 25px;
+		padding: 5px;
+		padding-left: 11px;
+		padding-right:45px;
+		font-size: x-large;
+		margin-top: 20px;
+
+	}
+
+  div{
+
+    height: 15px;
+
+  }
+
+.reloj{
+
+  margin-left:-40px;
+  font-size:small;
+  padding-right:5px;
+  padding-top:15px;
+  padding-bottom:8px;
+  padding-left:40px;
+  font-weight:bold;
+  
+}
+
+</style>
+</head>
+
+<body>
+
+	<div style="display:flex;align-content:center;justify-content:center">
+		<h1>Bienvenidos a mi chat!</h1>
+	</div>
+
+
+	<!-- <a class="par">prueba de chat</a> -->
+
+	<ul id="messages"></ul>
+	<form id="form" action="">
+		<input id="input" autocomplete="off" /><button>Send</button>
+  </form>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+ 
+
+    var socket = io();
+
+    var messages = document.getElementById('messages');
+    var form = document.getElementById('form');
+    var input = document.getElementById('input');
+    var usuario=prompt('introduce tu nombre')
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (input.value) {
+        socket.emit('chat message',usuario+": "+ input.value);
+        input.value = '';
+      }
+    });
+
+
+       var d = new Date();
+
+        var hora=d.getHours();
+        var minutos=d.getMinutes();
+  
+
+    socket.on('chat message', function (msg) {
+
+      var reloj= document.createElement('a')
+      reloj.innerHTML = hora+':'+minutos;
+      reloj.classList.add("reloj");
+      var item = document.createElement('a');
+      var espacio = document.createElement('br')
+      var unDiv = document.createElement('div')
+      item.textContent =msg;
+
+      messages.appendChild(item);
+      messages.appendChild(reloj);
+      messages.appendChild(espacio);
+      messages.appendChild(unDiv);
+      
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+  </script>
+</body>
+
+</html>
